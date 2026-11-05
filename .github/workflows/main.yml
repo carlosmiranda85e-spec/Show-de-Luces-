@@ -20,14 +20,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Aceptar licencias Android
-        run: yes | sdkmanager --licenses
-
-      - name: Instalar SDK 35
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      - name: Aceptar licencias e instalar Android SDK
+        run: |
+          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | sort -V | tail -n 1)
+          yes | "$SDKMANAGER" --licenses
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Compilar APK
         uses: gradle/gradle-build-action@v3
